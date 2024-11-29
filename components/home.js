@@ -9,7 +9,7 @@ const PokemonItem = ({ item, onEdit, onDelete }) => (
   <View style={styles.pokemonItem}>
     <TouchableOpacity onPress={() => onEdit(item)}>
       <View style={styles.pokemonDetails}>
-        <Text style={styles.pokemonTitle}>Pokémon Cadastrado</Text>
+        <Text style={styles.pokemonTitle}>Pokémon Capturado</Text>
         <Text style={styles.pokemonText}>Número: {item.numero}</Text>
         <Text style={styles.pokemonText}>Nome: {item.nomePokemon}</Text>
         <Text style={styles.pokemonText}>Tipo: {item.tipo}</Text>

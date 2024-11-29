@@ -35,39 +35,40 @@ export default function RegisterPokemon({ navigation }) {
     }
   };
 
-  // Função para cadastrar o Pokémon
-  const handleAddPokemon = async () => {
-    if (!nomePokemon || !tipo || !altura || !peso || !numero) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos.");
+
+const handleAddPokemon = async () => {
+  if (!nomePokemon || !tipo || !altura || !peso || !numero) {
+    Alert.alert("Erro", "Por favor, preencha todos os campos.");
+    return;
+  }
+
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      Alert.alert("Erro", "Você precisa estar logado para cadastrar um Pokémon.");
       return;
     }
 
-    try {
-      const user = auth.currentUser;
-      if (!user) {
-        Alert.alert("Erro", "Você precisa estar logado para cadastrar um Pokémon.");
-        return;
-      }
+    // Adicionando o Pokémon à coleção 'tblPokemon' com o usuário autenticado
+    await addDoc(collection(firestore, 'tblPokemon'), {
+      nomePokemon,
+      tipo,
+      altura,
+      peso,
+      numero,
+      userId: user.uid, // Armazenando o ID do usuário
+      imageUri, // Salvando a imagem do Pokémon
+    });
 
-      // Adicionando o Pokémon à coleção 'tblPokemon' com o usuário autenticado
-      await addDoc(collection(firestore, 'tblPokemon'), {
-        nomePokemon,
-        tipo,
-        altura,
-        peso,
-        numero,
-        userId: user.uid, // Armazenando o ID do usuário
-        imageUri, // Salvando a imagem do Pokémon
-      });
+    Alert.alert("Sucesso", "Pokémon cadastrado com sucesso!");
+    navigation.navigate("Home");  // Altere aqui para navegação direta para a tela "Home"
+  } catch (error) {
+    Alert.alert("Erro", "Ocorreu um erro ao cadastrar o Pokémon. Tente novamente.");
+    console.error("Erro ao cadastrar Pokémon: ", error);
+  }
+  navigation.navigate("Home");
+};
 
-      Alert.alert("Sucesso", "Pokémon cadastrado com sucesso!");
-      navigation.navigate("Home");
-
-    } catch (error) {
-      Alert.alert("Erro", "Ocorreu um erro ao cadastrar o Pokémon. Tente novamente.");
-      console.error("Erro ao cadastrar Pokémon: ", error);
-    }
-  };
 
   return (
     <ImageBackground style={styles.fundo} resizeMode="cover" source={require('../assets/fundo.jpg')}>
