@@ -1,0 +1,7 @@
+![Tela Home](https://github.com/user-attachments/assets/21401c06-572d-4af9-a2de-df36a1bc0766)
+![Tela Home 2](https://github.com/user-attachments/assets/60aeee1e-8614-4de4-9126-cfbf61e12f7c)
+![Tela Esqueceu](https://github.com/user-attachments/assets/a644de1b-c2f1-4d17-b643-64dbf130641f)
+![Tela Cadastro](https://github.com/user-attachments/assets/8eac869a-f03a-4bf7-ae74-c4c102b0f390)
+![Tela Cadastro Pokemon](https://github.com/user-attachments/assets/2ad4f5fc-4b9d-4bd3-aab0-af561c3e476e)
+![Tela Alterar](https://github.com/user-attachments/assets/7d8521a6-227b-4185-8bf2-db390357e1de)
+![Tela Login](https://github.com/user-attachments/assets/54b23f57-442a-4713-bd0d-1ab5eddd8947)
