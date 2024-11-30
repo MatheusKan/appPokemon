@@ -1,33 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground, ScrollView } from 'react-native';
 import { firestore } from '../firebase';
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-
-// Função para buscar os dados do Pokémon
-const fetchPokemonData = async (id, setPokemonData) => {
-  try {
-    const docRef = doc(firestore, "tblPokemon", id);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      setPokemonData(data);
-    } else {
-      console.log("Nenhum Pokémon encontrado com esse ID.");
-    }
-  } catch (error) {
-    console.error("Erro ao buscar dados do Pokémon: ", error);
-  }
-};
+import { doc, updateDoc } from "firebase/firestore";
 
 export default function ChangePokemon({ navigation, route }) {
   useEffect(() => {
     console.log('Parametros recebidos:', route.params);
-    // Puxa os dados do Pokémon, incluindo a imagem, quando o componente for montado
-    fetchPokemonData(route.params.id, setPokemonData);
   }, [route.params]);
 
-  const { id, nomePokemon = '', tipo = '', altura = '', peso = '', numero = '', imageUri = '' } = route.params || {}; 
+  const { 
+    id, 
+    nomePokemon = '', 
+    tipo = '', 
+    altura = '', 
+    peso = '', 
+    numero = '',
+    imageUri = ''  // Foto existente do Pokémon, mas não será alterada
+  } = route.params || {}; // Valores padrões
 
   // Inicializando os estados dos campos do Pokémon
   const [nomePokemonState, setNomePokemon] = useState(nomePokemon);
@@ -35,7 +24,6 @@ export default function ChangePokemon({ navigation, route }) {
   const [alturaState, setAltura] = useState(altura);
   const [pesoState, setPeso] = useState(peso);
   const [numeroState, setNumero] = useState(numero);
-  const [image, setImage] = useState(imageUri); // Estado para a imagem, mas sem permitir alteração
 
   // Função para atualizar os dados do Pokémon
   async function changePokemon() {
@@ -43,11 +31,9 @@ export default function ChangePokemon({ navigation, route }) {
       Alert.alert("Erro", "Por favor, preencha todos os campos antes de alterar.");
       return;
     }
-
+    Alert.alert("Sucesso", "Pokémon alterado com sucesso.");
+    navigation.navigate("Home");
     try {
-      // Como não queremos alterar a imagem, usamos a URL da imagem atual (image) sem alterações
-      const imageUrl = image ? image : null; // Se não tiver imagem, envia null
-
       // Atualiza o documento do Pokémon na coleção "tblPokemon"
       await updateDoc(doc(firestore, "tblPokemon", id), {
         nomePokemon: nomePokemonState,
@@ -55,11 +41,10 @@ export default function ChangePokemon({ navigation, route }) {
         altura: alturaState,
         peso: pesoState,
         numero: numeroState,
-        imageUri: imageUrl  // Não alteramos a imagem
+        imageUri: imageUri  // Mantém a imagem existente, sem alteração
       });
 
-      Alert.alert("Sucesso", "Pokémon alterado com sucesso.");
-      navigation.goBack();   // Volta para a tela principal
+ // Volta para a tela principal
     } catch (error) {
       console.error("Erro ao alterar: ", error);
       Alert.alert("Erro", "Erro ao alterar. Por favor, tente novamente.");
@@ -111,9 +96,9 @@ export default function ChangePokemon({ navigation, route }) {
               keyboardType="numeric"
             />
 
-            {/* Exibe a imagem atual, mas não permite alteração */}
-            {image && (
-              <Image source={{ uri: image }} style={styles.imagePreview} />
+            {/* Não exibe nem permite atualizar a imagem */}
+            {imageUri && (
+              <Image source={{ uri: imageUri }} style={styles.imagePreview} />
             )}
 
             <TouchableOpacity style={styles.btnenviar} onPress={changePokemon}>
@@ -142,7 +127,7 @@ const styles = StyleSheet.create({
   fundo2: {
     flex: 1,
   },
-  texto:{
+  texto: {
     color: 'white',
     fontSize: 21,
   },
@@ -161,7 +146,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnenviar: {
-    marginTop: 38,
+    marginTop: 100,
     backgroundColor: '#686868',
     borderColor: '#ffffff',
     borderWidth: 0.6,
@@ -183,12 +168,6 @@ const styles = StyleSheet.create({
   },
   btnVoltar: {
     backgroundColor: '#FF5050',
-    marginTop: 5
-  },
-  imagePreview: {
-    width: 200,
-    height: 200,
-    borderRadius: 10,
-    marginVertical: 20,
+    marginTop: 5,
   },
 });

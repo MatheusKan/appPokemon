@@ -36,38 +36,46 @@ export default function RegisterPokemon({ navigation }) {
   };
 
 
-const handleAddPokemon = async () => {
-  if (!nomePokemon || !tipo || !altura || !peso || !numero) {
-    Alert.alert("Erro", "Por favor, preencha todos os campos.");
-    return;
-  }
-
-  try {
-    const user = auth.currentUser;
-    if (!user) {
-      Alert.alert("Erro", "Você precisa estar logado para cadastrar um Pokémon.");
+  const handleAddPokemon = async () => {
+    if (!nomePokemon || !tipo || !altura || !peso || !numero) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos.");
       return;
     }
-
-    // Adicionando o Pokémon à coleção 'tblPokemon' com o usuário autenticado
-    await addDoc(collection(firestore, 'tblPokemon'), {
-      nomePokemon,
-      tipo,
-      altura,
-      peso,
-      numero,
-      userId: user.uid, // Armazenando o ID do usuário
-      imageUri, // Salvando a imagem do Pokémon
-    });
-
     Alert.alert("Sucesso", "Pokémon cadastrado com sucesso!");
-    navigation.navigate("Home");  // Altere aqui para navegação direta para a tela "Home"
-  } catch (error) {
-    Alert.alert("Erro", "Ocorreu um erro ao cadastrar o Pokémon. Tente novamente.");
-    console.error("Erro ao cadastrar Pokémon: ", error);
-  }
-  navigation.navigate("Home");
-};
+  
+    // Navega para a tela 'Home' após o sucesso
+    navigation.navigate("Home");
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        Alert.alert("Erro", "Você precisa estar logado para cadastrar um Pokémon.");
+        return;
+      }
+  
+      // Adiciona o Pokémon à coleção 'tblPokemon'
+      await addDoc(collection(firestore, 'tblPokemon'), {
+        nomePokemon,
+        tipo,
+        altura,
+        peso,
+        numero,
+        userId: user.uid, // Armazenando o ID do usuário
+        imageUri, // Salvando a imagem do Pokémon
+      });
+  
+      // Chama o alert de sucesso após a inserção no Firestore
+      Alert.alert("Sucesso", "Pokémon cadastrado com sucesso!");
+  
+      // Navega para a tela 'Home' após o sucesso
+      navigation.navigate("Home");
+  
+    } catch (error) {
+      // Em caso de erro, mostra o erro
+      console.error("Erro ao cadastrar Pokémon: ", error);
+      Alert.alert("Erro", "Ocorreu um erro ao cadastrar o Pokémon. Tente novamente.");
+    }
+  };
+  
 
 
   return (

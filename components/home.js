@@ -166,9 +166,10 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   pokemonItem: {
+    textAlign: 'center',
     backgroundColor: '#fff',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     marginHorizontal: 10,
     marginVertical: 10,
     padding: 10,
@@ -189,7 +190,8 @@ const styles = StyleSheet.create({
   pokemonText: {
     fontSize: 21,
     fontWeight: '400',
-    textAlign: 'right',
+    textAlign: 'center',
+    marginLeft: 33,
 
   },
   pokemonImage: {
@@ -197,7 +199,9 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 8,
     marginTop: 10,
-    textAlign: 'right',
+    textAlign: 'center',
+    marginLeft: 66,
+
 
   },
   deleteButton: {
